@@ -6,7 +6,7 @@ Experimentation, and practice with Voronoi spatial partitioning and related algo
 
 Voronoi diagrams divide a plane into regions based on the distance to a given set of points (sites). Each region contains all points closer to one site than to any other.
 
-![thumbnail](./thumbnails/voronoi-v0-euclidean.ppm)
+![thumbnail](./thumbnails/thumbnail.png)
 
 ## How It Works
 
