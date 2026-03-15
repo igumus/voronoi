@@ -25,6 +25,10 @@ $ ./nob
 $ ./build/voronoi
 ```
 
+## Commands
+- When `R` key pressed; Resets current view
+- When `S` key pressed; Saves current view as PPM file with name `output.ppm` 
+
 ## References
 
 - [Voronoi Diagram](https://en.wikipedia.org/wiki/Voronoi_diagram)

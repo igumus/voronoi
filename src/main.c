@@ -6,6 +6,7 @@
 
 #define WIDTH  800
 #define HEIGHT 600
+#define TARGET_FPS 60
 
 // NOTE: Color Storage
 #define COLOR_RED                    (Color) {0x00, 0x00, 0xFF, 0xFF}
@@ -108,6 +109,32 @@ void reset() {
     }
 }
 
+void save(const char *path)
+{
+    FILE *f = fopen(path, "wb");
+    if (f == NULL) {
+        nob_log(NOB_ERROR, "Could not open file %s for writing: %s\n", path, strerror(errno));
+        exit(1);
+    }
+
+    fprintf(f, "P6\n%d %d 255\n", WIDTH, HEIGHT);
+    for (size_t y = 0; y < HEIGHT; ++y) {
+        for (size_t x = 0; x < WIDTH; ++x) {
+            Color pixel = pixels[y * WIDTH + x];
+            uint8_t bytes[3] = {
+                pixel.r,
+                pixel.g,
+                pixel.b
+            };
+            fwrite(bytes, sizeof(bytes), 1, f);
+        }
+    }
+
+    fclose(f);
+    nob_log(NOB_INFO, "File %s generated successfully\n", path);
+}
+
+
 int main(void) {
     Image image = {
         .data = pixels,
@@ -117,38 +144,40 @@ int main(void) {
         .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8,
     };
 
-    SetTargetFPS(60);
-    InitWindow(WIDTH, HEIGHT, "framebuffer texture");
+    SetTargetFPS(TARGET_FPS;
+            InitWindow(WIDTH, HEIGHT, "Voronoi Diagram");
 
-    Texture2D texture = LoadTextureFromImage(image);
-    reset();
-
-    while (!WindowShouldClose()) {
-
-
-        if (IsKeyPressed(KEY_R)) {
+            Texture2D texture = LoadTextureFromImage(image);
             reset();
-        }
 
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            if (seed_count < SEED_COUNT_MAX) {
-                Vector2 mouse = GetMousePosition();
-                seeds[seed_count].x = mouse.x;
-                seeds[seed_count].y = mouse.y;
-                seed_count++;
-
-                update_image();
+            while (!WindowShouldClose()) {
+            if (IsKeyPressed(KEY_R)) {
+            reset();
             }
-        }
 
-        UpdateTexture(texture, pixels);
+            if (IsKeyPressed(KEY_S)) {
+            save("output.ppm");
+            }
 
-        BeginDrawing();
-        ClearBackground(COLOR_BACKGROUND);
-        DrawTexture(texture, 0, 0, WHITE);
-        EndDrawing();
-    }
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (seed_count < SEED_COUNT_MAX) {
+            Vector2 mouse = GetMousePosition();
+            seeds[seed_count].x = mouse.x;
+            seeds[seed_count].y = mouse.y;
+            seed_count++;
 
-    CloseWindow();
-    return 0;
+            update_image();
+            }
+            }
+
+            UpdateTexture(texture, pixels);
+
+            BeginDrawing();
+            ClearBackground(COLOR_BACKGROUND);
+            DrawTexture(texture, 0, 0, WHITE);
+            EndDrawing();
+            }
+
+            CloseWindow();
+            return 0;
 }
