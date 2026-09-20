@@ -144,40 +144,40 @@ int main(void) {
         .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8,
     };
 
-    SetTargetFPS(TARGET_FPS;
-            InitWindow(WIDTH, HEIGHT, "Voronoi Diagram");
+    SetTargetFPS(TARGET_FPS);
+    InitWindow(WIDTH, HEIGHT, "Voronoi Diagram");
 
-            Texture2D texture = LoadTextureFromImage(image);
+    Texture2D texture = LoadTextureFromImage(image);
+    reset();
+
+    while (!WindowShouldClose()) {
+        if (IsKeyPressed(KEY_R)) {
             reset();
+        }
 
-            while (!WindowShouldClose()) {
-            if (IsKeyPressed(KEY_R)) {
-            reset();
-            }
-
-            if (IsKeyPressed(KEY_S)) {
+        if (IsKeyPressed(KEY_S)) {
             save("output.ppm");
-            }
+        }
 
-            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             if (seed_count < SEED_COUNT_MAX) {
-            Vector2 mouse = GetMousePosition();
-            seeds[seed_count].x = mouse.x;
-            seeds[seed_count].y = mouse.y;
-            seed_count++;
+                Vector2 mouse = GetMousePosition();
+                seeds[seed_count].x = mouse.x;
+                seeds[seed_count].y = mouse.y;
+                seed_count++;
 
-            update_image();
+                update_image();
             }
-            }
+        }
 
-            UpdateTexture(texture, pixels);
+        UpdateTexture(texture, pixels);
 
-            BeginDrawing();
-            ClearBackground(COLOR_BACKGROUND);
-            DrawTexture(texture, 0, 0, WHITE);
-            EndDrawing();
-            }
+        BeginDrawing();
+        ClearBackground(COLOR_BACKGROUND);
+        DrawTexture(texture, 0, 0, WHITE);
+        EndDrawing();
+    }
 
-            CloseWindow();
-            return 0;
+    CloseWindow();
+    return 0;
 }
